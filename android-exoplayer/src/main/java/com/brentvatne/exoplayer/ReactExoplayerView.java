@@ -346,6 +346,10 @@ class ReactExoplayerView extends FrameLayout implements
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                if(player!=null) {
+                    player.release();
+                    player = null;
+                }
                 if (player == null) {
                     TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(BANDWIDTH_METER);
                     trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
@@ -357,6 +361,7 @@ class ReactExoplayerView extends FrameLayout implements
                     player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, defaultLoadControl);
                     player.addListener(self);
                     player.setMetadataOutput(self);
+
                     exoPlayerView.setPlayer(player);
                     audioBecomingNoisyReceiver.setListener(self);
                     BANDWIDTH_METER.addEventListener(new Handler(), self);
